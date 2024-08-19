@@ -8,12 +8,14 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ChickenMode
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.HorseModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SheepModelAdapter;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -81,10 +83,9 @@ public final class ReplayModels {
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:polar_bear"),
                 new AnimalModelFactory(new Identifier("textures/entity/bear/polarbear.png")));
-        
-        // TODO: Make this render wool properly.
-        ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:sheep"),
-                new AnimalModelFactory(new Identifier("textures/entity/sheep/sheep.png")));
+                       
+        ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:sheep"), entity -> new SheepModelAdapter((SheepEntity) entity));
+
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:turtle"), 
                 new AnimalModelFactory(new Identifier("textures/entity/turtle/big_sea_turtle.png")));

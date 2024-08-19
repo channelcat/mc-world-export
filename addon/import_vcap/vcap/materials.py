@@ -185,7 +185,8 @@ def generate_nodes(obj, node_tree: NodeTree, image_provider: Callable[[str, bool
             node_tree.links.new(tex_node.outputs[0], target.inputs[index])
             return tex_node
         elif isinstance(value, list):
-            target.inputs[index].default_value = (value[0], value[1], value[2])
+            # RGBA (TODO: support alpha)
+            target.inputs[index].default_value = (value[0], value[1], value[2], 1.0)
         else:
             print(f'Cannot add input with type {type(value)} from material {name}.')
             
