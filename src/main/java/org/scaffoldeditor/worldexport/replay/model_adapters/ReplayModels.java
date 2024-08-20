@@ -9,6 +9,7 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.specific.HorseModelA
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SheepModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.VillagerModelAdapter;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
@@ -16,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -115,6 +117,8 @@ public final class ReplayModels {
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:vex"), 
                 new BipedModelFactory(new Identifier("textures/entity/illager/vex.png")));
         
+        ReplayModelAdapter.REGISTRY.put(new Identifier("villager"), entity -> new VillagerModelAdapter<>((VillagerEntity) entity, new Identifier("textures/entity/villager/villager.png")));
+                
         ReplayModelAdapter.REGISTRY.put(new Identifier("zombie_villager"), 
                 new BipedModelFactory(new Identifier("textures/entity/zombie_villager/zombie_villager.png")));
 
@@ -131,7 +135,7 @@ public final class ReplayModels {
          * MISC
          */
 
-        // TODO: Axolotl's varients make implementation non-trivial
+        // TODO: Axolotl's varients make implementation non-altrivi
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("bee"),
                 new AnimalModelFactory(new Identifier("textures/entity/bee/bee.png")));
@@ -162,7 +166,6 @@ public final class ReplayModels {
         registerSinglePart("magma_cube");
         registerSinglePart("parrot");
         registerSinglePart("dolphin");
-        registerSinglePart("villager");
         registerSinglePart("salmon");
         registerSinglePart("spider");
         registerSinglePart("phantom");
