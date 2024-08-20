@@ -22,6 +22,7 @@ import org.scaffoldeditor.worldexport.replay.models.Transform;
 import org.scaffoldeditor.worldexport.util.MeshUtils;
 
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -39,11 +40,11 @@ public class VillagerClothingFeatureAdapter implements ReplayFeatureAdapter<Repl
         levelToId.put(5, new Identifier("diamond"));
     });
 
-    final VillagerModelAdapter<?> villager;
+    final VillagerModelAdapter<VillagerEntity> villager;
 
     private final Map<Identifier, Iterable<ReplayModelPart>> clothingParts = new HashMap<>();
 
-    public VillagerClothingFeatureAdapter(VillagerModelAdapter<?> villager) {
+    public VillagerClothingFeatureAdapter(VillagerModelAdapter<VillagerEntity> villager) {
         this.villager = villager;
     }
 
@@ -58,7 +59,7 @@ public class VillagerClothingFeatureAdapter implements ReplayFeatureAdapter<Repl
         for (var clothing : getClothingTextures()) {
             if (!clothingParts.containsKey(clothing.texture)) {
                 var partList = new ArrayList<ReplayModelPart>();
-                for (var villagerPart : villager.getVillagerParts(EntityModelPartNames.HEAD)) {
+                for (var villagerPart : villager.getEntityParts(EntityModelPartNames.HEAD)) {
                     if (villagerPart.getReplayPart() != null) {
                         String texName = MaterialUtils.getTexName(clothing.texture);
                         var clothingPart = new ReplayModelPart("villager." + villagerPart.getIdentifier() + "." + clothing.id);

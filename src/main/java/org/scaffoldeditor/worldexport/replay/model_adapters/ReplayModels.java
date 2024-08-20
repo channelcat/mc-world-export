@@ -162,6 +162,7 @@ public final class ReplayModels {
          */
         registerSinglePart("creeper");
         registerSinglePart("illager");
+        registerSinglePart("pillager");
         registerSinglePart("wither");
         registerSinglePart("magma_cube");
         registerSinglePart("parrot");

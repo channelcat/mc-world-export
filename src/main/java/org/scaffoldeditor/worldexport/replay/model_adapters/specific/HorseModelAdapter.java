@@ -26,6 +26,5 @@ public class HorseModelAdapter extends AnimalModelAdapter<HorseEntity> {
 
     public HorseModelAdapter(HorseEntity entity) throws IllegalArgumentException {
         super(entity, TEXTURES.get(entity.getVariant()));
-        
     }
 }

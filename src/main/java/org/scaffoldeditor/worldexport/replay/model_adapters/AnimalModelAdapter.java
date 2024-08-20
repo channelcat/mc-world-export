@@ -1,6 +1,7 @@
 package org.scaffoldeditor.worldexport.replay.model_adapters;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -17,6 +18,7 @@ import net.minecraft.client.render.entity.model.QuadrupedEntityModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+
 
 /**
  * Umbrella model adapter that works specifically with entities which use Animal Models.
