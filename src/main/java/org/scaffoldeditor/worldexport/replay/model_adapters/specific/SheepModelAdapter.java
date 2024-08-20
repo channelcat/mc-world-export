@@ -6,15 +6,11 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.QuadrupedModelAdapte
 import org.scaffoldeditor.worldexport.replay.models.ReplayModel.Pose;
 import org.scaffoldeditor.worldexport.replay.models.ReplayModelPart;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.Identifier;
 
 public class SheepModelAdapter extends QuadrupedModelAdapter<SheepEntity> {
-
-    private static final MinecraftClient client = MinecraftClient.getInstance();
     private static final Identifier TEXTURE = new Identifier("textures/entity/sheep/sheep.png");
-    private static final Identifier WOOL = new Identifier("textures/entity/sheep/sheep_fur.png");
 
     // protected SheepWoolEntityModel<SheepEntity> entityModel;
     // protected AnimalFeatureModelAdapter<SheepWoolEntityModel<SheepEntity>> woolAdapter;

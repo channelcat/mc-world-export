@@ -12,9 +12,11 @@ import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.AnimalModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.ChickenEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.render.entity.model.QuadrupedEntityModel;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
@@ -51,8 +53,8 @@ public class AnimalModelAdapter<T extends LivingEntity> extends LivingEntityMode
             partNames.put(accessor.getLeftHindLeg(), EntityModelPartNames.LEFT_HIND_LEG);
             partNames.put(accessor.getRightFrontLeg(), EntityModelPartNames.RIGHT_FRONT_LEG);
             partNames.put(accessor.getLeftFrontLeg(), EntityModelPartNames.LEFT_FRONT_LEG);
-        }
-
+        } 
+        
         if (model instanceof BipedEntityModel) {
             BipedEntityModel<T> biped = (BipedEntityModel<T>) model;
             partNames.put(biped.head, EntityModelPartNames.HEAD);

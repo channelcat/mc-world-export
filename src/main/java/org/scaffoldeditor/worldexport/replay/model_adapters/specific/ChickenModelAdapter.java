@@ -1,11 +1,16 @@
 package org.scaffoldeditor.worldexport.replay.model_adapters.specific;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.scaffoldeditor.worldexport.mixins.AnimalModelAccessor;
 import org.scaffoldeditor.worldexport.replay.model_adapters.AnimalModelAdapter;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.AnimalModel;
+import net.minecraft.client.render.entity.model.ChickenEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -28,19 +33,32 @@ public class ChickenModelAdapter extends AnimalModelAdapter<ChickenEntity> {
     
     @Override
     protected void extractPartNames(AnimalModel<ChickenEntity> model, Map<ModelPart, String> partNames) {
-        super.extractPartNames(model, partNames);
-        
+        if(model instanceof ChickenEntityModel) {
+            var accessor = (AnimalModelAccessor) model;
 
-        // if(model instanceof ChickenEntityModel){
-        //     ChickenEntityModel<ChickenEntity> chicken = (ChickenEntityModel<ChickenEntity>) model;
-        //     partNames.put(chicken.beak, EntityModelPartNames.BEAK);
-        //     partNames.put(chicken.head, EntityModelPartNames.HEAD);
-        //     partNames.put(chicken.leftLeg, EntityModelPartNames.LEFT_LEG);
-        //     partNames.put(chicken.leftWing, EntityModelPartNames.LEFT_WING);
-        //     partNames.put(chicken.rightLeg, EntityModelPartNames.RIGHT_LEG);
-        //     partNames.put(chicken.rightWing, EntityModelPartNames.RIGHT_WING);
-        //     partNames.put(chicken.torso, "torso");
-        //     partNames.put(chicken.wattle, EntityModelPartNames.WATTLE);
-        //   }
+            var iterablePartNames = new String[]{
+                    EntityModelPartNames.HEAD,
+                    EntityModelPartNames.BEAK,
+                    "red_thing",
+                    EntityModelPartNames.BODY,
+                    EntityModelPartNames.RIGHT_LEG,
+                    EntityModelPartNames.LEFT_LEG,
+                    EntityModelPartNames.RIGHT_WING,
+                    EntityModelPartNames.LEFT_WING
+            };
+
+            int i = 0;
+            for (var part : accessor.retrieveHeadParts()) {
+                partNames.put(part, iterablePartNames[i++]);
+            }
+            for (var part : accessor.retrieveBodyParts()) {
+                partNames.put(part, iterablePartNames[i++]);
+            }
+            if (i != iterablePartNames.length) {
+                throw new IllegalArgumentException("Wrong number of chicken parts!");
+            }
+        } else {
+            throw new IllegalArgumentException("Model is not an instance of ChickenEntityModel");
+        }
     }
 }

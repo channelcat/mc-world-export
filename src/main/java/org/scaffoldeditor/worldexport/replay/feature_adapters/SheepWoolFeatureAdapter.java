@@ -97,7 +97,6 @@ public class SheepWoolFeatureAdapter {
         // Rainbow sheep
         // Not supported yet since we generate materials only once
         if (sheepEntity.hasCustomName() && "jeb_".equals(sheepEntity.getName().getString())) {
-            int m = 25;
             int n = sheepEntity.age / 25 + sheepEntity.getId();
             int o = DyeColor.values().length;
             int p = n % o;

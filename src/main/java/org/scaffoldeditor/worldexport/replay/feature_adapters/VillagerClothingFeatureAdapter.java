@@ -2,18 +2,11 @@ package org.scaffoldeditor.worldexport.replay.feature_adapters;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.scaffoldeditor.worldexport.mat.Material;
@@ -22,37 +15,18 @@ import org.scaffoldeditor.worldexport.mat.MaterialConsumer;
 import org.scaffoldeditor.worldexport.mat.MaterialUtils;
 import org.scaffoldeditor.worldexport.mat.PromisedReplayTexture;
 import org.scaffoldeditor.worldexport.mat.ReplayTexture;
-import org.scaffoldeditor.worldexport.replay.model_adapters.BipedModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.VillagerModelAdapter;
 import org.scaffoldeditor.worldexport.replay.models.ReplayModel.Pose;
 import org.scaffoldeditor.worldexport.replay.models.ReplayModelPart;
 import org.scaffoldeditor.worldexport.replay.models.Transform;
 import org.scaffoldeditor.worldexport.util.MeshUtils;
 
-import com.replaymod.replaystudio.lib.viaversion.libs.fastutil.Hash;
-
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.VillagerEntityRenderer;
-import net.minecraft.client.render.entity.feature.VillagerClothingFeatureRenderer;
-import net.minecraft.client.render.entity.feature.VillagerResourceMetadata;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
-import net.minecraft.client.render.entity.model.ModelWithHat;
-import net.minecraft.client.render.entity.model.VillagerResemblingModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.Util;
-import net.minecraft.village.VillagerData;
-import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.village.VillagerProfession;
-import net.minecraft.village.VillagerType;
 
 public class VillagerClothingFeatureAdapter implements ReplayFeatureAdapter<ReplayModelPart> {
     // TODO: somehow read this from the feature renderer?
