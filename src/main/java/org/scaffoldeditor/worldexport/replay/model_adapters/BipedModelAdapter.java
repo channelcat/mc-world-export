@@ -21,15 +21,30 @@ import net.minecraft.util.Identifier;
  * An animal model adapter that can render items and armor
  */
 public class BipedModelAdapter<T extends LivingEntity> extends AnimalModelAdapter<T> {
+    private static final String[] HEAD_PARTS = {
+        EntityModelPartNames.HEAD
+    };
+    private static final String[] BODY_PARTS = {
+        EntityModelPartNames.BODY,
+        EntityModelPartNames.RIGHT_ARM,
+        EntityModelPartNames.LEFT_ARM,
+        EntityModelPartNames.RIGHT_LEG,
+        EntityModelPartNames.LEFT_LEG,
+        EntityModelPartNames.HAT
+    };
 
     public BipedModelAdapter(T entity, Identifier texture) throws IllegalArgumentException {
         super(entity, texture);
     }
+    
+    @Override
+    protected String[] getHeadPartNames() { return HEAD_PARTS; }
+    @Override
+    protected String[] getBodyPartNames() { return BODY_PARTS; }
 
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static class BipedModelFactory<U extends LivingEntity> implements ReplayModelAdapterFactory<U> {
-
         Identifier texture;
 
         public BipedModelFactory(Identifier texture) {

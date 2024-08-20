@@ -1,10 +1,12 @@
 package org.scaffoldeditor.worldexport.replay.model_adapters;
 
 import org.scaffoldeditor.worldexport.replay.model_adapters.BipedModelAdapter.BipedModelFactory;
+import org.scaffoldeditor.worldexport.replay.model_adapters.QuadrupedModelAdapter.QuadrupedModelFactory;
 import org.scaffoldeditor.worldexport.replay.model_adapters.ReplayModelAdapter.ReplayModelAdapterFactory;
 import org.scaffoldeditor.worldexport.replay.model_adapters.custom.FireballModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.custom.ProjectileModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ChickenModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.FoxModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.HorseModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModelAdapter;
@@ -15,6 +17,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -30,17 +33,15 @@ public final class ReplayModels {
     public static final float BIPED_Y_OFFSET = 1.5f;
 
     public static class AnimalModelFactory<T extends LivingEntity> implements ReplayModelAdapterFactory<T> {
-
         public Identifier tex;
         public AnimalModelFactory(Identifier tex) {
             this.tex = tex;
         }
-
+        
         @Override
         public AnimalModelAdapter<T> create(T entity) {
             return new AnimalModelAdapter<T>(entity, tex);
         }
-
     }
 
     public static class SinglePartModelFactory implements ReplayModelAdapterFactory<LivingEntity> {
@@ -71,26 +72,26 @@ public final class ReplayModels {
          */
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:cow"),
-                new AnimalModelFactory(new Identifier("textures/entity/cow/cow.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/cow/cow.png")));
                 
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:goat"),
-                new AnimalModelFactory(new Identifier("textures/entity/goat/goat.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/goat/goat.png")));
 
         // TODO: write custom model adapter that updates texture situationally.
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:panda"), 
-                new AnimalModelFactory(new Identifier("textures/entity/panda/panda.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/panda/panda.png")));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:pig"),
-                new AnimalModelFactory(new Identifier("textures/entity/pig/pig.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/pig/pig.png")));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:polar_bear"),
-                new AnimalModelFactory(new Identifier("textures/entity/bear/polarbear.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/bear/polarbear.png")));
                        
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:sheep"), entity -> new SheepModelAdapter((SheepEntity) entity));
 
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("minecraft:turtle"), 
-                new AnimalModelFactory(new Identifier("textures/entity/turtle/big_sea_turtle.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/turtle/big_sea_turtle.png")));
             
         /**
          * BIPEDS
@@ -144,16 +145,15 @@ public final class ReplayModels {
 
         // ReplayModelAdapter.REGISTRY.put(new Identifier("chicken"), entity -> new ChickenModelAdapter(entity));
         
-        ReplayModelAdapter.REGISTRY.put(new Identifier("fox"),
-                new AnimalModelFactory(new Identifier("textures/entity/fox/fox.png")));
+        ReplayModelAdapter.REGISTRY.put(new Identifier("fox"), ent -> new FoxModelAdapter((FoxEntity) ent));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("hoglin"), 
-                new AnimalModelFactory(new Identifier("textures/entity/hoglin/hoglin.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/hoglin/hoglin.png")));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("horse"), ent -> new HorseModelAdapter((HorseEntity) ent));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("donkey"),
-                new AnimalModelFactory(new Identifier("textures/entity/horse/donkey.png")));
+                new QuadrupedModelFactory(new Identifier("textures/entity/horse/donkey.png")));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("item"), ent -> new ItemModelAdapter((ItemEntity) ent));
         

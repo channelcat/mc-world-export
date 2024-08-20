@@ -239,6 +239,14 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
             forEachPartInternal(key, child, consumer, offset, false);
         });
     }
+
+    protected float getScale() {
+        return 1;
+    }
+    protected Vector3d getScale3d() {
+        var scale = getScale();
+        return new Vector3d(scale, scale, scale);
+    }
  
     /**
      * Execute a function only for each root part.
@@ -246,6 +254,7 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
      */
     protected void forRootParts(ModelPartConsumer consumer) {
         final MatrixStack offset = new MatrixStack();
+        
         for (var pair : getRootParts()) {
             offset.push();
 
