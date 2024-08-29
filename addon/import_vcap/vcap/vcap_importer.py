@@ -110,6 +110,8 @@ def readWorld(world_dat: IO[bytes], vcontext: VCAPContext, settings: VCAPSetting
     frames: list[VcapFrame] = []
     offset = Vector(data.vcap_offset_mc(vcontext.context.scene))
     offset.freeze()
+    print(f"Vcap Offset (Minecraft coordinates): {offset}")
+    print(f"Vcap Offset (Unreal coordinates): ({offset[0]*-100}, {offset[2]*-100}, {offset[1]*-100})")
     for i in range(0, len(nbt_frames)):
         frames.append(load_frame(nbt_frames[i], i, offset))
 
