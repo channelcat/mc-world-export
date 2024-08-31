@@ -92,6 +92,12 @@ class OBJECT_OT_FBXQuickExport(Operator):
         selected_object = context.active_object
         exported_files = []
 
+        # Check if a file path is selected
+        if not props.filepath:
+            self.report({'ERROR'}, "Please select an export path")
+            show_message_box(self, context, "Please select an export path", "Export Error", 'ERROR')
+            return {'CANCELLED'}
+
         if not selected_object or selected_object.type != "ARMATURE":
             self.report({'ERROR'}, "Please select an armature")
             logging.debug("Error: Please select an armature!")
