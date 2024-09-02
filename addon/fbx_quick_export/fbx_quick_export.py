@@ -60,6 +60,23 @@ def update_filename_on_object_select(f,g):
         else:
             props.filename = "Please select an armature!"
 
+def make_clickable_link(self, file_path):
+        file_path = os.path.abspath(bpy.path.abspath(file_path))
+        return f'<a href="file:///{file_path}">{file_path}</a>'
+
+class FBX_OT_OpenFilePath(bpy.types.Operator):
+    bl_idname = "fbx.open_file_path"
+    bl_label = "Open File Path"
+
+    filepath: bpy.props.StringProperty()
+
+    def execute(self, context):
+        try:
+            bpy.ops.wm.path_open(filepath=self.filepath)
+        except Exception as e:
+            self.report({'ERROR'}, f"Failed to open file path: {e}")
+        return {'FINISHED'}
+
 class FBX_OT_MessageDialog(bpy.types.Operator):
     bl_idname = "fbx.message_dialog"
     bl_label = "FBX Message Dialog"
@@ -67,6 +84,7 @@ class FBX_OT_MessageDialog(bpy.types.Operator):
     message: bpy.props.StringProperty()
     title: bpy.props.StringProperty()
     icon: bpy.props.StringProperty()
+    filepath: bpy.props.StringProperty()
 
     def execute(self, context):
         return {'FINISHED'}
@@ -77,9 +95,12 @@ class FBX_OT_MessageDialog(bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         layout.label(text=self.message)
+        if self.filepath:
+            op = layout.operator("fbx.open_file_path", text="Open File Path", icon='FILE_FOLDER')
+            op.filepath = self.filepath
 
-def show_message_box(self, context, message, title, icon='INFO'):
-    bpy.ops.fbx.message_dialog('INVOKE_DEFAULT', message=message, title=title, icon=icon)
+def show_message_box(self, context, message, title, icon='INFO', filepath=None):
+    bpy.ops.fbx.message_dialog('INVOKE_DEFAULT', message=message, title=title, icon=icon, filepath=filepath)
 
 class OBJECT_OT_FBXQuickExport(Operator):
     bl_idname = "object.fbx_quick_export"
@@ -114,7 +135,8 @@ class OBJECT_OT_FBXQuickExport(Operator):
                     exported_files.append(filename)
 
             if props.export_animation:
-                filename = f"{props.filename}_animation.fbx" if props.filename else f"{selected_object.name.split('.')[0]}_animation.fbx"
+                base_filename = f"{props.filename}_animation" if props.filename else f"{selected_object.name.split('.')[0]}_animation"
+                filename = self.get_next_animation_filename(props.filepath, base_filename)
                 self.fbx_export(context, filename, True)
                 # Check if the file was created
                 if os.path.exists(os.path.join(props.filepath, filename)):
@@ -124,18 +146,21 @@ class OBJECT_OT_FBXQuickExport(Operator):
             if name_conflict:
                 self.restore_original_names(original_names, selected_original_names)
 
-       # Show success message
+        # Show success message
         if exported_files:
-            message = f"Successfully exported:\n" + "\n".join(exported_files)
-            show_message_box(self, context, message, "Export Successful", 'INFO')
+            message = f"Successfully exported: \n" + "\n".join(exported_files)
+            show_message_box(self, context, message, "Export Successful", 'INFO', filepath=props.filepath)
         else:
             show_message_box(self, context, "No files were exported.", "Export Information", 'WARNING')
-
         return {'FINISHED'}
 
-    def make_clickable_link(self, file_path):
-        file_path = os.path.abspath(bpy.path.abspath(file_path))
-        return f'<a href="file:///{file_path}">{file_path}</a>'
+    def get_next_animation_filename(self, filepath, base_filename):
+        index = 1
+        while True:
+            filename = f"{base_filename}_{index:02d}.fbx"
+            if not os.path.exists(os.path.join(filepath, filename)):
+                return filename
+            index += 1
 
     def clean_and_rename_objects(self, selected_object):
         obj_original_name = ""
@@ -212,9 +237,10 @@ class OBJECT_OT_FBXQuickExport(Operator):
     def fbx_export(self, context, filename, export_anim_bool):
         props = context.scene.fbx_export_props
         filepath = os.path.join(props.filepath, filename)
+
         bpy.ops.export_scene.fbx(
             filepath=filepath,
-            check_existing=True,
+            check_existing=False,
             filter_glob='*.fbx',
             use_selection=True,
             use_visible=False,
@@ -279,6 +305,7 @@ classes = (
     FBXExportProperties,
     OBJECT_OT_FBXQuickExport,
     FBX_OT_MessageDialog,
+    FBX_OT_OpenFilePath,
     VIEW3D_PT_FBXQuickExportPanel,
 )
 
