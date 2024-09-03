@@ -23,6 +23,15 @@ from bpy.app.handlers import persistent
 logging.basicConfig(level=logging.DEBUG, format='(%(threadName)-10s) %(message)s')
 logging.debug("FBX Quick Export: Script is running")
 
+def toggle_export_options(self, context):
+    props = context.scene.fbx_export_props
+    if not props.export_mesh and not props.export_animation:
+        # If both are unchecked, set the one that was just unchecked back to checked
+        if self == props.export_mesh:
+            props.export_animation = True
+        else:
+            props.export_mesh = True
+
 class FBXExportProperties(PropertyGroup):
     filepath: StringProperty(
         name="Export Path",
@@ -32,33 +41,56 @@ class FBXExportProperties(PropertyGroup):
         subtype='DIR_PATH'
     )
     filename: StringProperty(
-        name="File Name Base",
+        name="File Name Prefix",
         description="Base name of the exported file (without extension)",
         default="",
         maxlen=255
     )
+    preview_filename: StringProperty(
+    name="Preview Filename",
+    description="Preview of the generated filename",
+    default="",
+    )
     export_mesh: BoolProperty(
         name="Export Mesh",
         description="Export mesh FBX",
-        default=True
+        default=True,
+        update=toggle_export_options
     )
     export_animation: BoolProperty(
         name="Export Animation",
         description="Export animation FBX",
-        default=False
+        default=False,
+        update=toggle_export_options
     )
 
 @persistent
-def update_filename_on_object_select(f,g):
+def update_filename_on_object_select(dummy):
     active_object = bpy.context.active_object
     if active_object:
-        #logging.debug(f"FBX Quick Export: Active object is '{active_object.name}'")
         props = bpy.context.scene.fbx_export_props
         if active_object.type == "ARMATURE":
-            props.filename = active_object.name.split('.')[0]
-            #logging.debug(f"FBX Quick Export: Filename updated to '{props.filename}'")
+            object_name = active_object.name.split('.')[0]
+            prefix = props.filename if props.filename else ""
+            preview_lines = []
+
+            if props.export_mesh:
+                preview_mesh = f"{prefix}_{object_name}_mesh.fbx" if prefix else f"{object_name}_mesh.fbx"
+                preview_lines.append(f"Mesh: {preview_mesh}")
+
+            if props.export_animation:
+                base_filename = f"{prefix}_{object_name}_animation" if prefix else f"{object_name}_animation"
+                animation_index = 1
+                while True:
+                    preview_anim = f"{base_filename}_{animation_index:02d}.fbx"
+                    if not os.path.exists(os.path.join(props.filepath, preview_anim)):
+                        break
+                    animation_index += 1
+                preview_lines.append(f"Animation: {preview_anim}")
+
+            props.preview_filename = "\n".join(preview_lines)
         else:
-            props.filename = "Please select an armature!"
+            props.preview_filename = "Please select an armature!"
 
 def make_clickable_link(self, file_path):
         file_path = os.path.abspath(bpy.path.abspath(file_path))
@@ -110,7 +142,7 @@ class OBJECT_OT_FBXQuickExport(Operator):
     def execute(self, context):
         logging.debug("FBX Quick Export: Export operator executed")
         props = context.scene.fbx_export_props
-        selected_object = context.active_object
+        #selected_object = context.active_object
         exported_files = []
 
         # Check if a file path is selected
@@ -118,33 +150,36 @@ class OBJECT_OT_FBXQuickExport(Operator):
             self.report({'ERROR'}, "Please select an export path")
             show_message_box(self, context, "Please select an export path", "Export Error", 'ERROR')
             return {'CANCELLED'}
-
-        if not selected_object or selected_object.type != "ARMATURE":
-            self.report({'ERROR'}, "Please select an armature")
-            logging.debug("Error: Please select an armature!")
+        
+        selected_armatures = [obj for obj in bpy.context.selected_objects if obj.type == "ARMATURE"]
+        if not selected_armatures:
+            self.report({'ERROR'}, "Please select at least one armature")
             return {'CANCELLED'}
 
-        name_conflict, original_names, selected_original_names = self.clean_and_rename_objects(selected_object)
+        for selected_object in selected_armatures:
+            bpy.ops.object.select_all(action='DESELECT')
+            selected_object.select_set(True)
+            context.view_layer.objects.active = selected_object
 
-        try:
-            if props.export_mesh:
-                filename = f"{props.filename}_mesh.fbx" if props.filename else f"{selected_object.name.split('.')[0]}_mesh.fbx"
-                self.fbx_export(context, filename, False)
-                # Check if the file was created
-                if os.path.exists(os.path.join(props.filepath, filename)):
-                    exported_files.append(filename)
+            name_conflict, original_names, selected_original_names = self.clean_and_rename_objects(selected_object)
 
-            if props.export_animation:
-                base_filename = f"{props.filename}_animation" if props.filename else f"{selected_object.name.split('.')[0]}_animation"
-                filename = self.get_next_animation_filename(props.filepath, base_filename)
-                self.fbx_export(context, filename, True)
-                # Check if the file was created
-                if os.path.exists(os.path.join(props.filepath, filename)):
-                    exported_files.append(filename)
+            try:
+                if props.export_mesh:
+                    filename = self.generate_filename(props.filename, selected_object.name, "mesh")
+                    self.fbx_export(context, filename, False)
+                    if os.path.exists(os.path.join(props.filepath, filename)):
+                        exported_files.append(filename)
 
-        finally:
-            if name_conflict:
-                self.restore_original_names(original_names, selected_original_names)
+                if props.export_animation:
+                    base_filename = self.generate_filename(props.filename, selected_object.name, "animation")
+                    filename = self.get_next_animation_filename(props.filepath, base_filename)
+                    self.fbx_export(context, filename, True)
+                    if os.path.exists(os.path.join(props.filepath, filename)):
+                        exported_files.append(filename)
+
+            finally:
+                if name_conflict:
+                    self.restore_original_names(original_names, selected_original_names)
 
         # Show success message
         if exported_files:
@@ -153,6 +188,16 @@ class OBJECT_OT_FBXQuickExport(Operator):
         else:
             show_message_box(self, context, "No files were exported.", "Export Information", 'WARNING')
         return {'FINISHED'}
+    
+    def generate_filename(self, user_input, selected_object_name, suffix):
+        # Split the object name at the first period
+        selected_object_name_base = selected_object_name.split('.')[0]
+        
+        # If user input is not empty, use it as a prefix
+        if user_input:
+            return f"{user_input}_{selected_object_name_base}_{suffix}"
+        else:
+            return f"{selected_object_name_base}_{suffix}"
 
     def get_next_animation_filename(self, filepath, base_filename):
         index = 1
@@ -299,6 +344,13 @@ class VIEW3D_PT_FBXQuickExportPanel(Panel):
         layout.prop(props, "filename")
         layout.prop(props, "export_mesh")
         layout.prop(props, "export_animation")
+
+        if props.preview_filename:
+            box = layout.box()
+            #box.label(text="Preview:")
+            for line in props.preview_filename.split('\n'):
+                box.label(text=line)
+
         layout.operator("object.fbx_quick_export")
 
 classes = (
