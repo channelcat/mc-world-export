@@ -276,7 +276,12 @@ def generate_nodes(obj, node_tree: NodeTree, image_provider: Callable[[str, bool
     node_tree.links.new(mix.outputs[0], principled_node.inputs[COLOR])
 
     color_tex = load_field('color', mix, 1, False)
-    load_field('color2', mix, 2, False)
+    color2_tex = load_field('color2', mix, 2, False)
+
+    # Connect alpha channel of color2 if it is a texture
+    if type(color2_tex) is ShaderNodeTexImage:
+        node_tree.links.new(color2_tex.outputs['Alpha'], mix.inputs['Fac'])
+
     
     load_field('roughness', principled_node, ROUGHNESS, True)
     load_field('metallic', principled_node, METALLIC, True)

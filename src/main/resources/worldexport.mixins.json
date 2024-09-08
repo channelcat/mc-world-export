@@ -7,7 +7,10 @@
   ],
   "client": [
     "ClientWorldMixin",
+    "AbstractHorseEntityRendererAccessor",
     "AnimalModelAccessor",
+    "HorseEntityRendererAccessor",
+    "HorseEntityModelAccessor",
     "ModelPartAccessor",
     "GuiRenderSettingsMixin",
     "QuadrupedModelAccessor",
