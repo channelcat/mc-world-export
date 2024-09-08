@@ -90,6 +90,9 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
     }
 
     public abstract Identifier getTexture();
+    public Identifier getOverlayTexture(){
+        return null;
+    };
 
     protected String getMaterialName() {
         return MaterialUtils.getTexName(getTexture());
@@ -97,7 +100,14 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
 
     @Override
     public void generateMaterials(MaterialConsumer file) {
-        createMaterial(getTexture(), file);
+        var overlayTexture = getOverlayTexture();
+
+        // If we have an overlay texture, add it in
+        if (overlayTexture != null) {
+            createMaterial(getTexture(), overlayTexture, getMaterialName(), file);
+        } else {
+            createMaterial(getTexture(), getMaterialName(), file);
+        }
     }
 
     @Override
@@ -123,7 +133,10 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
         if (replayModel == null)
             replayModel = captureBaseModel(model);
 
-        Pose<ReplayModelPart> pose = new Pose<>();
+        // Scale the model based on scale settings
+        var rootTransform = new Transform(new Vector3d(), new Quaterniond(), getScale3d(), true);
+        Pose<ReplayModelPart> pose = new Pose<>(rootTransform);
+
         forEachPart((name, part, transform, localTransform) -> {
             ReplayModelPart bone = boneMapping.get(part);
             if (bone == null) return;
@@ -175,6 +188,10 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
         });
         
         return bone;
+    }
+
+    public ReplayModelPart getReplayModelPart(ModelPart part) {
+        return boneMapping.get(part);
     }
 
     private void appendPartMesh(ReplayModelPart bone, ModelPart part) {

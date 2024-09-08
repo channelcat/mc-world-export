@@ -12,6 +12,7 @@ import org.scaffoldeditor.worldexport.mat.Material;
 import org.scaffoldeditor.worldexport.mat.MaterialConsumer;
 import org.scaffoldeditor.worldexport.mat.MaterialUtils;
 import org.scaffoldeditor.worldexport.mat.PromisedReplayTexture;
+import org.scaffoldeditor.worldexport.mat.ReplayTexture;
 import org.scaffoldeditor.worldexport.mat.Material.BlendMode;
 import org.scaffoldeditor.worldexport.replay.models.OverrideChannel;
 import org.scaffoldeditor.worldexport.replay.models.ReplayModel;
@@ -94,16 +95,55 @@ public abstract class LivingModelAdapter<T extends LivingEntity, M extends Repla
      * @param file Material consumer to use.
      * @return The material name.
      */
-    protected String createMaterial(Identifier texID, MaterialConsumer file) {
+    protected String createMaterial(Identifier texID, String materialName, MaterialConsumer file) {
         String texName = MaterialUtils.getTexName(texID);
         if (file.hasMaterial(texName)) return texName;
 
         Material mat = createMaterial(texName);
 
-        file.addMaterial(texName, mat);
+        file.addMaterial(materialName, mat);
         file.addTexture(texName, new PromisedReplayTexture(texID));
 
         return texName;
+    }
+
+    /**
+     * Get or create a material with overlay suitable for use with this model adapter.
+     * @param texID Minecraft texture ID.
+     * @param file Material consumer to use.
+     * @return The material name.
+     */
+    protected String createMaterial(Identifier texID, Identifier overlayTexID, String materialName, MaterialConsumer file) {
+        String texName = MaterialUtils.getTexName(texID);
+        String overlayTexName = MaterialUtils.getTexName(overlayTexID);
+        if (file.hasMaterial(materialName)) return materialName;
+        
+        Material material = createMaterialWithOverlay(texName, overlayTexName);
+
+        ReplayTexture rTexture = new PromisedReplayTexture(texID);
+        file.addTexture(texName, rTexture);
+        ReplayTexture orTexture = new PromisedReplayTexture(overlayTexID);
+        file.addTexture(overlayTexName, orTexture);
+
+        file.addMaterial(materialName, material);
+
+        return materialName;
+    }
+
+    /**
+     * Create a material suitable for use with this model adapter.
+     * @param texName Base texture name.
+     * @return The material.
+     */
+    protected Material createMaterialWithOverlay(String texName, String texOverlayName) {
+        Material mat = new Material();
+        mat.setColor(texName);
+        mat.setColor2(texOverlayName);
+        mat.setRoughness(1);
+        mat.setTransparent(isTransparent(entity));
+        mat.setColor2BlendMode(BlendMode.ADD);
+
+        return mat;
     }
 
     /**
@@ -116,7 +156,7 @@ public abstract class LivingModelAdapter<T extends LivingEntity, M extends Repla
         mat.setColor(texName);
         mat.setRoughness(1);
         mat.setTransparent(isTransparent(entity));
-        mat.setColor2BlendMode(BlendMode.SOFT_LIGHT);
+        mat.setColor2BlendMode(BlendMode.COLOR);
         mat.addOverride("color2", tint.getName());
 
         return mat;

@@ -205,7 +205,7 @@ public class CompositeModelAdapter<T extends LivingEntity> extends LivingModelAd
      * @param file Material consumer to add to.
      */
     protected void writeMaterial(String materialName, MaterialConsumer file) {
-        createMaterial(texture, file);
+        createMaterial(texture, getMaterialName(), file);
     }
     
     @Override

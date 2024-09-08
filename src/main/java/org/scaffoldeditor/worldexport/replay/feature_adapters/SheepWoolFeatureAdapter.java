@@ -64,7 +64,7 @@ public class SheepWoolFeatureAdapter {
     public void writePosePart(Pose<ReplayModelPart> pose, ReplayModelPart replayModelPart, ModelPart woolPart, String partName, String materialId, boolean isVisible) {
         // If a wool part doesn't exist, create it
         var woolReplayPart = modelPartCache.get(replayModelPart);
-        if (woolReplayPart == null) {
+        if (woolReplayPart == null && replayModelPart != null) {
             woolReplayPart = new ReplayModelPart("sheep_wool."+partName);
             woolReplayPart.getMesh().setActiveMaterialGroupName(materialId);
             // Apply the sheep wool part to this mesh

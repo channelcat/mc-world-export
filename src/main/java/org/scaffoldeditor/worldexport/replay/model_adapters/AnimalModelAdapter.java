@@ -4,10 +4,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.apache.logging.log4j.LogManager;
+import org.scaffoldeditor.worldexport.mat.Material;
+import org.scaffoldeditor.worldexport.mat.Material.BlendMode;
+import org.scaffoldeditor.worldexport.mat.MaterialConsumer;
+import org.scaffoldeditor.worldexport.mat.MaterialUtils;
+import org.scaffoldeditor.worldexport.mat.PromisedReplayTexture;
+import org.scaffoldeditor.worldexport.mat.ReplayTexture;
 import org.scaffoldeditor.worldexport.mixins.AnimalModelAccessor;
 import org.scaffoldeditor.worldexport.mixins.QuadrupedModelAccessor;
 
@@ -34,6 +41,7 @@ import net.minecraft.client.render.entity.model.PolarBearEntityModel;
 import net.minecraft.client.render.entity.model.QuadrupedEntityModel;
 import net.minecraft.client.render.entity.model.TurtleEntityModel;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.DonkeyEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
@@ -127,19 +135,24 @@ public class AnimalModelAdapter<T extends LivingEntity> extends LivingEntityMode
         return parts;
     }
 
+    public Map<String, ModelPart> getAllParts() {
+        var headAndBodyParts = getHeadAndBodyParts();
+        var additionalParts = getAdditionalBodyParts(headAndBodyParts);
+
+        if (additionalParts != null) {
+            var combinedMap = new HashMap<String, ModelPart>();
+            combinedMap.putAll(headAndBodyParts);
+            combinedMap.putAll(additionalParts);
+            return combinedMap;
+        }
+        
+        return headAndBodyParts;
+    }
+
     @Override
     protected void extractPartNames(AnimalModel<T> model, Map<ModelPart, String> partNames) {
-        var headAndBodyParts = getHeadAndBodyParts();
-        for (var part : headAndBodyParts.entrySet()) {
+        for (var part : getAllParts().entrySet()) {
             partNames.put(part.getValue(), part.getKey());
-        }
-
-        // Any additional parts from child classes
-        var additionalParts = getAdditionalBodyParts(headAndBodyParts);
-        if (additionalParts != null) {
-            for (var part : additionalParts.entrySet()) {
-                partNames.put(part.getValue(), part.getKey());
-            }
         }
     }
 
@@ -155,6 +168,7 @@ public class AnimalModelAdapter<T extends LivingEntity> extends LivingEntityMode
         // HoglinEntityRenderer;
         // HorseEntityModel;
         // HorseEntityRenderer;
+        // DonkeyEntity;
         // DonkeyEntityModel;
         // DonkeyEntityRenderer;
         // EndermanEntityModel;

@@ -6,6 +6,7 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.ReplayModelAdapter.R
 import org.scaffoldeditor.worldexport.replay.model_adapters.custom.FireballModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.custom.ProjectileModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ChickenModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.DonkeyModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.FoxModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.HorseModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAdapter;
@@ -17,6 +18,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.DonkeyEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.SheepEntity;
@@ -152,8 +154,7 @@ public final class ReplayModels {
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("horse"), ent -> new HorseModelAdapter((HorseEntity) ent));
         
-        ReplayModelAdapter.REGISTRY.put(new Identifier("donkey"),
-                new QuadrupedModelFactory(new Identifier("textures/entity/horse/donkey.png")));
+        ReplayModelAdapter.REGISTRY.put(new Identifier("donkey"), ent ->new DonkeyModelAdapter((DonkeyEntity) ent));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("item"), ent -> new ItemModelAdapter((ItemEntity) ent));
         

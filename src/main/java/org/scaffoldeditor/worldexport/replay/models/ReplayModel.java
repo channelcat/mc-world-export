@@ -50,6 +50,13 @@ public interface ReplayModel<T> {
             }
             overrideChannels.put(target, frame);
         }
+
+        public Pose() {
+            this.root = Transform.NEUTRAL;
+        }
+        public Pose(Transform transform) {
+            this.root = transform;
+        }
     }
 
     /**
