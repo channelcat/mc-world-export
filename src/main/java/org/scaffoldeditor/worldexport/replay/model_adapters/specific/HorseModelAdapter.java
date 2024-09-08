@@ -2,12 +2,7 @@ package org.scaffoldeditor.worldexport.replay.model_adapters.specific;
 
 import java.util.Map;
 
-import org.scaffoldeditor.worldexport.mat.Material;
-import org.scaffoldeditor.worldexport.mat.Material.BlendMode;
-import org.scaffoldeditor.worldexport.mat.MaterialConsumer;
 import org.scaffoldeditor.worldexport.mat.MaterialUtils;
-import org.scaffoldeditor.worldexport.mat.PromisedReplayTexture;
-import org.scaffoldeditor.worldexport.mat.ReplayTexture;
 import org.scaffoldeditor.worldexport.mixins.AbstractHorseEntityRendererAccessor;
 import org.scaffoldeditor.worldexport.mixins.HorseEntityRendererAccessor;
 import org.scaffoldeditor.worldexport.replay.feature_adapters.HorseArmorFeatureAdapter;

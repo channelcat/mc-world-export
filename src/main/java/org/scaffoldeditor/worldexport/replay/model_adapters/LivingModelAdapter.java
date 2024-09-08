@@ -141,7 +141,7 @@ public abstract class LivingModelAdapter<T extends LivingEntity, M extends Repla
         mat.setColor2(texOverlayName);
         mat.setRoughness(1);
         mat.setTransparent(isTransparent(entity));
-        mat.setColor2BlendMode(BlendMode.ADD);
+        mat.setColor2BlendMode(BlendMode.MIX);
 
         return mat;
     }
