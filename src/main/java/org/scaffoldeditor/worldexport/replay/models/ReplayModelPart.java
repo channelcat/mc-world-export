@@ -22,19 +22,25 @@ import de.javagl.obj.ObjWriter;
 import de.javagl.obj.Objs;
 
 public class ReplayModelPart implements TreeNode<ReplayModelPart> {
+
     public final List<ReplayModelPart> children = new ArrayList<>();
     private Obj mesh = Objs.create();
     private String name;
 
     public ReplayModelPart(String name) {
+        LogManager.getLogger().debug("ReplayModelPart created with name: {}", name);
         this.name = name;
     }
 
     public String getName() {
-        return name;
+        LogManager.getLogger().debug("Getting name for ReplayModelPart: {}", name);
+        return name != null && !name.isEmpty() ? name : "unnamed_part";
     }
 
     public void setName(String name) {
+        if (name == null){
+            throw new IllegalArgumentException("Name cannot be null");
+        }
         this.name = name;
     }
 

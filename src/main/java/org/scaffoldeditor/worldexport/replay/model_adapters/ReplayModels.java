@@ -8,6 +8,9 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.custom.ProjectileMod
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ChickenModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.DonkeyModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.FoxModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.OcelotModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.CatModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.WolfModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.HorseModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModelAdapter;
@@ -23,6 +26,9 @@ import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.passive.OcelotEntity;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -138,7 +144,7 @@ public final class ReplayModels {
          * MISC
          */
 
-        // TODO: Axolotl's varients make implementation non-altrivi
+        // TODO: Axolotl's varients make implementation non-trivial
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("bee"),
                 new AnimalModelFactory(new Identifier("textures/entity/bee/bee.png")));
@@ -148,6 +154,12 @@ public final class ReplayModels {
         // ReplayModelAdapter.REGISTRY.put(new Identifier("chicken"), entity -> new ChickenModelAdapter(entity));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("fox"), ent -> new FoxModelAdapter((FoxEntity) ent));
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("ocelot"), ent -> new OcelotModelAdapter((OcelotEntity) ent));
+        
+        ReplayModelAdapter.REGISTRY.put(new Identifier("cat"), ent ->new CatModelAdapter((CatEntity) ent));
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("wolf"), ent ->new WolfModelAdapter((WolfEntity) ent));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("hoglin"), 
                 new QuadrupedModelFactory(new Identifier("textures/entity/hoglin/hoglin.png")));

@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Represents a replay model that uses the <code>multipart</code> rig type.
  * @see ReplayModel
@@ -68,7 +70,11 @@ public class MultipartReplayModel implements ReplayModel<ReplayModelPart> {
      */
     public ReplayModelPart getBone(String name) {
         for (ReplayModelPart bone : getBones()) {
-            if (bone.getName().equals(name)) return bone;
+            String boneName = bone.getName();
+            LogManager.getLogger().debug("Checking part with name: {}", boneName);
+            if (boneName != null && boneName.equals(name)) {
+                return bone;
+            }
         }
         return null;
     }
