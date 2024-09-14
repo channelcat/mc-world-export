@@ -7,6 +7,7 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.custom.FireballModel
 import org.scaffoldeditor.worldexport.replay.model_adapters.custom.ProjectileModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ChickenModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.DonkeyModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.MuleModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.FoxModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.OcelotModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.CatModelAdapter;
@@ -16,12 +17,14 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.specific.ItemModelAd
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SheepModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.VillagerModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.GhastModelAdapter;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.DonkeyEntity;
+import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.SheepEntity;
@@ -29,6 +32,7 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -127,7 +131,7 @@ public final class ReplayModels {
                 new BipedModelFactory(new Identifier("textures/entity/illager/vex.png")));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("villager"), entity -> new VillagerModelAdapter<>((VillagerEntity) entity, new Identifier("textures/entity/villager/villager.png")));
-                
+
         ReplayModelAdapter.REGISTRY.put(new Identifier("zombie_villager"), 
                 new BipedModelFactory(new Identifier("textures/entity/zombie_villager/zombie_villager.png")));
 
@@ -145,6 +149,9 @@ public final class ReplayModels {
          */
 
         // TODO: Axolotl's varients make implementation non-trivial
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("axolotl"),
+                new AnimalModelFactory(new Identifier("textures/entity/axolotl/axolotl_lucy.png")));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("bee"),
                 new AnimalModelFactory(new Identifier("textures/entity/bee/bee.png")));
@@ -167,34 +174,47 @@ public final class ReplayModels {
         ReplayModelAdapter.REGISTRY.put(new Identifier("horse"), ent -> new HorseModelAdapter((HorseEntity) ent));
         
         ReplayModelAdapter.REGISTRY.put(new Identifier("donkey"), ent ->new DonkeyModelAdapter((DonkeyEntity) ent));
-        
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("mule"), ent ->new MuleModelAdapter((MuleEntity) ent));
         ReplayModelAdapter.REGISTRY.put(new Identifier("item"), ent -> new ItemModelAdapter((ItemEntity) ent));
-        
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("ghast"), ent -> new GhastModelAdapter<>((GhastEntity) ent));
+              
         /**
          * SINGLE PART
          */
-        registerSinglePart("creeper");
-        registerSinglePart("illager");
-        registerSinglePart("pillager");
-        registerSinglePart("wither");
-        registerSinglePart("magma_cube");
-        registerSinglePart("parrot");
-        registerSinglePart("dolphin");
-        registerSinglePart("salmon");
-        registerSinglePart("spider");
-        registerSinglePart("phantom");
-        registerSinglePart("ghast");
-        registerSinglePart("strider");
-        registerSinglePart("ravager");
-        registerSinglePart("silverfish");
-        registerSinglePart("guardian");
-        registerSinglePart("snow_golem");
-        registerSinglePart("slime");
-        registerSinglePart("iron_golem");
-        registerSinglePart("cod");
         registerSinglePart("bat");
-        registerSinglePart("endermite");
         registerSinglePart("blaze");
+        registerSinglePart("cod");
+        registerSinglePart("creeper");
+        registerSinglePart("dolphin");
+        registerSinglePart("endermite");
+        registerSinglePart("evoker");
+        //registerSinglePart("ghast");
+        registerSinglePart("glow_squid");
+        registerSinglePart("guardian");
+        registerSinglePart("illager");
+        registerSinglePart("iron_golem");
+        registerSinglePart("leash_knot");
+        registerSinglePart("llama_spit");
+        registerSinglePart("magma_cube");
+        registerSinglePart("minecart");
+        registerSinglePart("parrot");
+        registerSinglePart("phantom");
+        registerSinglePart("pillager");
+        registerSinglePart("pufferfish");
+        registerSinglePart("ravager");
+        registerSinglePart("salmon");
+        registerSinglePart("shulker_bullet");
+        registerSinglePart("silverfish");
+        registerSinglePart("slime");
+        registerSinglePart("snow_golem");
+        registerSinglePart("spider");
+        registerSinglePart("squid");
+        registerSinglePart("strider");
+        registerSinglePart("tropical_fish");
+        registerSinglePart("witch");
+        registerSinglePart("wither");
 
         /**
          * COMPOSITE

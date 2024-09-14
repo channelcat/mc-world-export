@@ -8,7 +8,6 @@ import net.minecraft.util.Identifier;
 
 public class OcelotModelAdapter extends QuadrupedModelAdapter<OcelotEntity> {
 
-
     public OcelotModelAdapter(OcelotEntity entity) throws IllegalArgumentException {
         super(entity, null);
     }

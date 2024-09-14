@@ -18,7 +18,8 @@
     "SpriteMixin",
     "TimelineMixin",
     "ReplayModMixin",
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "GhastEntityRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
