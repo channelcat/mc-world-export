@@ -19,7 +19,8 @@
     "TimelineMixin",
     "ReplayModMixin",
     "GameRendererMixin",
-    "GhastEntityRendererAccessor"
+    "GhastEntityRendererAccessor",
+    "WitherSkeletonEntityRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -18,6 +18,8 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.specific.PlayerModel
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SheepModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.VillagerModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.GhastModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.WitherSkeletonModelAdapter;
+
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
@@ -33,6 +35,7 @@ import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.mob.GhastEntity;
+import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -179,7 +182,9 @@ public final class ReplayModels {
         ReplayModelAdapter.REGISTRY.put(new Identifier("item"), ent -> new ItemModelAdapter((ItemEntity) ent));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("ghast"), ent -> new GhastModelAdapter<>((GhastEntity) ent));
-              
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("wither_skeleton"), ent -> new WitherSkeletonModelAdapter<>((WitherSkeletonEntity) ent));
+
         /**
          * SINGLE PART
          */
