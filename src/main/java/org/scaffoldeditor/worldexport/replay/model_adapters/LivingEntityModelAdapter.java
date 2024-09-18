@@ -12,9 +12,9 @@ import org.scaffoldeditor.worldexport.mat.MaterialConsumer;
 import org.scaffoldeditor.worldexport.mat.MaterialUtils;
 import org.scaffoldeditor.worldexport.mixins.ModelPartAccessor;
 import org.scaffoldeditor.worldexport.replay.models.MultipartReplayModel;
+import org.scaffoldeditor.worldexport.replay.models.ReplayModel.Pose;
 import org.scaffoldeditor.worldexport.replay.models.ReplayModelPart;
 import org.scaffoldeditor.worldexport.replay.models.Transform;
-import org.scaffoldeditor.worldexport.replay.models.ReplayModel.Pose;
 import org.scaffoldeditor.worldexport.util.MathUtils;
 import org.scaffoldeditor.worldexport.util.MeshUtils;
 import org.scaffoldeditor.worldexport.util.ModelUtils;
@@ -30,6 +30,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+
 
 /**
  * A living model adapter designed for entities with <code>EntityModel</code>s.
@@ -116,8 +117,7 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
     }
 
     @Override
-    public void setAngles(float limbAngle, float limbDistance, float animationProgress, float headYaw,
-            float headPitch) {
+    public void setAngles(float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.model.setAngles(getEntity(), limbAngle, limbDistance, animationProgress, headYaw, headPitch);
     }
 
@@ -160,6 +160,9 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
     }
 
     protected MultipartReplayModel captureBaseModel(M model) {
+        // Log the name of the model being processed
+        System.out.println("Model: " + model.getClass().getSimpleName());
+
         MultipartReplayModel replayModel = new MultipartReplayModel();
 
         animateModel(0, 0, 0);
@@ -179,11 +182,18 @@ public abstract class LivingEntityModelAdapter<T extends LivingEntity, M extends
     }
 
     private ReplayModelPart genPartRecursive(ModelPart part, String name) {
+        // Log the name of the part being processed
+        //System.out.println("Part: " + name);
+
         ReplayModelPart bone = new ReplayModelPart(name);
         appendPartMesh(bone, part);
+
+        // Add the part to the bone mapping
         boneMapping.put(part, bone);
 
+        // Recursively process each child part
         ((ModelPartAccessor) (Object) part).getChildren().forEach((childName, child) -> {
+            //System.out.println("Child part: " + childName);
             bone.children.add(genPartRecursive(child, childName));
         });
         

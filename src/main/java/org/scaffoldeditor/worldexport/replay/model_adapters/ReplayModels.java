@@ -19,7 +19,9 @@ import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SheepModelA
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.VillagerModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.GhastModelAdapter;
 import org.scaffoldeditor.worldexport.replay.model_adapters.specific.WitherSkeletonModelAdapter;
-
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.BatModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.SlimeModelAdapter;
+import org.scaffoldeditor.worldexport.replay.model_adapters.specific.MagmaCubeModelAdapter;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.ItemEntity;
@@ -37,6 +39,9 @@ import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.entity.passive.BatEntity;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.mob.MagmaCubeEntity;
 
 /**
  * Contains replay models for vanilla Minecraft entities.
@@ -179,16 +184,23 @@ public final class ReplayModels {
         ReplayModelAdapter.REGISTRY.put(new Identifier("donkey"), ent ->new DonkeyModelAdapter((DonkeyEntity) ent));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("mule"), ent ->new MuleModelAdapter((MuleEntity) ent));
+
+        ReplayModelAdapter.REGISTRY.put(new Identifier("bat"), ent ->new BatModelAdapter((BatEntity) ent));
+
         ReplayModelAdapter.REGISTRY.put(new Identifier("item"), ent -> new ItemModelAdapter((ItemEntity) ent));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("ghast"), ent -> new GhastModelAdapter<>((GhastEntity) ent));
 
         ReplayModelAdapter.REGISTRY.put(new Identifier("wither_skeleton"), ent -> new WitherSkeletonModelAdapter<>((WitherSkeletonEntity) ent));
 
+        ReplayModelAdapter.REGISTRY.put(new Identifier("slime"), ent -> new SlimeModelAdapter<>((SlimeEntity) ent));
+        
+        ReplayModelAdapter.REGISTRY.put(new Identifier("magma_cube"), ent -> new MagmaCubeModelAdapter<>((MagmaCubeEntity) ent));
+
         /**
          * SINGLE PART
          */
-        registerSinglePart("bat");
+        //registerSinglePart("bat");
         registerSinglePart("blaze");
         registerSinglePart("cod");
         registerSinglePart("creeper");
@@ -202,7 +214,7 @@ public final class ReplayModels {
         registerSinglePart("iron_golem");
         registerSinglePart("leash_knot");
         registerSinglePart("llama_spit");
-        registerSinglePart("magma_cube");
+        //registerSinglePart("magma_cube");
         registerSinglePart("minecart");
         registerSinglePart("parrot");
         registerSinglePart("phantom");
@@ -212,7 +224,7 @@ public final class ReplayModels {
         registerSinglePart("salmon");
         registerSinglePart("shulker_bullet");
         registerSinglePart("silverfish");
-        registerSinglePart("slime");
+        //registerSinglePart("slime");
         registerSinglePart("snow_golem");
         registerSinglePart("spider");
         registerSinglePart("squid");

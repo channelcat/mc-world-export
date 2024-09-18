@@ -20,7 +20,10 @@
     "ReplayModMixin",
     "GameRendererMixin",
     "GhastEntityRendererAccessor",
-    "WitherSkeletonEntityRendererAccessor"
+    "WitherSkeletonEntityRendererAccessor",
+    "BatEntityModelAccessor",
+    "SlimeEntityRendererAccessor",
+    "MagmaCubeEntityRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
